@@ -12,21 +12,27 @@ class VentanaPrincipal(QMainWindow):
 
         #Sección de diseño
         self.setWindowTitle("La 2da aplicación con PyQt6")
-        self.setFixedSize(QSize(500,500))
+        self.setFixedSize(QSize(1280,720))
 
         caja = QGridLayout()
-        b1 = QPushButton("1")
-        b2 = QPushButton("2")
-        b3 = QPushButton("3")
-        b4 = QPushButton("4")
-        b5 = QPushButton("5")
+        b1 = QPushButton("Adopcion")
+        b2 = QPushButton("Alimentos")
+        b3 = QPushButton("Jugetes")
+        b4 = QPushButton("Medicamentos")
+        b5 = QPushButton("Buscar")
+        b6 = QPushButton("carrito")
+        b7 = QPushButton("flechaL")
+        b8 = QPushButton("flechaR")
         caja.addWidget(b1, 0,0)
         caja.addWidget(b2, 0,1)
         caja.addWidget(b3, 0,2)
-        caja.addWidget(b4, 1,0)
-        caja.addWidget(b5, 1,1)
+        caja.addWidget(b4, 0,3)
+        caja.addWidget(b6, 0,4)
+        caja.addWidget(b5, 0,5)
+        caja.addWidget(b7, 1,0)
+        caja.addWidget(b8, 1,5)
 
-        """
+        """"
         #Ejecucion de la reacción al Click
         b1.clicked.connect(self.reaccionar_1)
         b2.clicked.connect(self.reaccionar_2)
