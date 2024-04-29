@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QGridLayout, QWidget, QDialog, QVBoxLayout, QComboBox, QSpinBox
+from datetime import datetime
 
 class RazaDialog(QDialog):
     def __init__(self, parent=None):
@@ -54,6 +55,11 @@ class MarcaComidaDialog(QDialog):
         combo_box = QComboBox()
         combo_box.addItems(marcas)
         layout.addWidget(combo_box)
+
+        # Botón de aceptar
+        button = QPushButton("Aceptar")
+        button.clicked.connect(lambda: self.accept())
+        layout.addWidget(button)
 
         self.setLayout(layout)
 
@@ -168,6 +174,17 @@ class VentanaPrincipal(QMainWindow):
                     # Obtener los kilogramos seleccionados del diálogo
                     kilos_seleccionados = dialogo_kilos.kilogramos_seleccionados_signal
                     mi_comida.set_kilogramos(kilos_seleccionados)
+
+                    # Crear una cadena con la información de la comida
+                    info_comida = str(mi_comida)
+
+                    # Guardar la información en un archivo de texto
+                    try:
+                        with open("informacion_comida.txt", "a") as file:
+                            file.write(f"Información de comida seleccionada ({datetime.now()}):\n{info_comida}\n\n")
+                        print("Información de comida guardada correctamente en 'informacion_comida.txt'")
+                    except Exception as e:
+                        print(f"Error al guardar la información de comida: {e}")
 
                     # Abrir la ventana de comida con los datos actualizados
                     nueva_ventana = OtraVentana("Información de comida", mi_comida)

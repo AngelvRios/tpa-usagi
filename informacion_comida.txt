@@ -1,0 +1,6 @@
+Información de comida seleccionada (2024-04-22 14:37:12.310598):
+Nombre: Mazuri, Tipo: tortuga, Edad: , Kilogramos: 1, Comida: 
+
+Información de comida seleccionada (2024-04-23 13:50:53.985735):
+Nombre: Dog Chow, Tipo: perro, Edad: , Kilogramos: 3, Comida: 
+
