@@ -4,3 +4,12 @@ Nombre: Mazuri, Tipo: tortuga, Edad: , Kilogramos: 1, Comida:
 Información de comida seleccionada (2024-04-23 13:50:53.985735):
 Nombre: Dog Chow, Tipo: perro, Edad: , Kilogramos: 3, Comida: 
 
+Información de comida seleccionada (2024-04-29 19:33:14.160891):
+Nombre: Royal Canin, Tipo: gato, Edad: , Kilogramos: 12, Comida: 
+
+Información de comida seleccionada (2024-04-30 14:03:12.772195):
+Nombre: Dog Chow, Tipo: perro, Edad: , Kilogramos: 11, Comida: 
+
+Información de comida seleccionada (2024-04-30 14:06:05.344836):
+Marca: Living world, Tipo: tortuga, Edad: , Kilogramos: 1
+

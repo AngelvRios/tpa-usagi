@@ -117,7 +117,7 @@ class comida:
         self.kilogramos = kilogramos
 
     def __str__(self):
-        return f"Nombre: {self.marca}, Tipo: {self.tipo}, Edad: {self.age}, Kilogramos: {self.kilogramos}, Comida: {self.comidaN}"
+        return f"Marca: {self.marca}, Tipo: {self.tipo}, Edad: {self.age}, Kilogramos: {self.kilogramos}"
 
 class OtraVentana(QWidget):
     def __init__(self, title, comida_instance):
