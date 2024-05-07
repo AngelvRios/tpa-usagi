@@ -1,9 +1,6 @@
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
 from comida import SeleccionarComidaDialog
-from adopcion1 import VentanaPrincipal, TiendaMascotas  # Importar desde adopcion1.py
-from adopcion1 import VentanaAdopcion
-from adopcion1 import VentanaMascotas
-
+from adopcion1 import TiendaMascotas, VentanaAdopcion, VentanaMascotas
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, tienda):
@@ -37,6 +34,7 @@ class VentanaPrincipal(QMainWindow):
 
     def mostrar_animales_disponibles(self):
         ventana_mascotas = VentanaMascotas(self.tienda)
+        ventana_mascotas.actualizar_mascotas_disponibles()  # Actualizar la lista de animales antes de mostrar
         ventana_mascotas.exec()
 
 if __name__ == "__main__":
