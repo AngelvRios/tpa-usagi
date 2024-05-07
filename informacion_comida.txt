@@ -13,3 +13,9 @@ Nombre: Dog Chow, Tipo: perro, Edad: , Kilogramos: 11, Comida:
 Información de comida seleccionada (2024-04-30 14:06:05.344836):
 Marca: Living world, Tipo: tortuga, Edad: , Kilogramos: 1
 
+Información de comida seleccionada (2024-05-06 22:58:29.562661):
+Marca: Dog Chow, Tipo: conejo, Edad: anciano, Kilogramos: 10
+
+Información de comida seleccionada (2024-05-06 23:00:43.653225):
+Marca: Ricocan, Tipo: perro, Edad: cachorro, Kilogramos: 1
+

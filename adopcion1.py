@@ -1,5 +1,5 @@
-from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QGridLayout, QWidget, QDialog, QVBoxLayout, QComboBox, QLineEdit, QMessageBox
+from datetime import datetime
 
 class adopcion:
     def __init__(self, nombre, edad, raza):
@@ -27,8 +27,8 @@ class TiendaMascotas:
         return self.gatos_rescatados
 
 class VentanaPrincipal(QMainWindow):
-    def __init__(self, tienda):
-        super().__init__()
+    def __init__(self, tienda, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.tienda = tienda
         self.ventana_mascotas = None  # Inicializa la ventana de mascotas 
 
@@ -61,8 +61,8 @@ class VentanaPrincipal(QMainWindow):
         ventana_adopcion.exec()
 
 class VentanaMascotas(QDialog):
-    def __init__(self, tienda, parent=None):
-        super().__init__(parent)
+    def __init__(self, tienda, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.setWindowTitle("Mascotas Disponibles")
         self.setFixedSize(500, 500)
 
@@ -87,8 +87,8 @@ class VentanaMascotas(QDialog):
         self.setLayout(self.layout)  
 
 class VentanaAdopcion(QDialog):
-    def __init__(self, tienda, parent=None):
-        super().__init__(parent)
+    def __init__(self, tienda, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.setWindowTitle("Formulario de adopción")
         self.setFixedSize(500, 500)
 
@@ -116,6 +116,7 @@ class VentanaAdopcion(QDialog):
         self.genero_combo_box.addItems(genero)
         layout.addWidget(QLabel("Género:"))
         layout.addWidget(self.genero_combo_box)
+        
 
         # Botón de aceptar
         btn_aceptar = QPushButton("Aceptar")
@@ -127,12 +128,20 @@ class VentanaAdopcion(QDialog):
         self.tienda = tienda
 
     def guardar_adopcion(self):
-        nombre = self.nombre_edit.text()
-        edad = self.edad_edit.text()
-        correo = self.correo_edit.text()
+        # Obtener el texto de los campos
+        nombre = self.nombre_edit.text().strip()
+        edad = self.edad_edit.text().strip()
+        correo = self.correo_edit.text().strip()
+        nombremascota = self.nombremascota_edit.text().strip()
         genero = self.genero_combo_box.currentText()
 
-
+        # Verificar si algún campo está vacío
+        if not nombre or not edad or not correo or not nombremascota:
+            # Mostrar un mensaje de advertencia
+            QMessageBox.warning(self, "Campos vacíos", "Por favor, llene todos los campos.")
+            return
+        
+        
         # Mostrar la ventana de mensaje
         mensaje = QMessageBox()
         mensaje.setWindowTitle("Información guardada")
@@ -141,16 +150,11 @@ class VentanaAdopcion(QDialog):
         mensaje.exec()
 
 # Ejemplo de uso
-tienda = TiendaMascotas()
-
-# Agregar algunos perros y gatos rescatados
-tienda.adoptar_perro("corxea", "3 años", "Labrador Retriever")
-tienda.adoptar_perro("perejil","2 años" , "desconocido")
-tienda.adoptar_gato("wisin", "1 años", "negro")
-tienda.adoptar_gato("yandel", "4 años", "naranjo")
-
 if __name__ == "__main__":
-    app = QApplication([])
-    ventana_principal = VentanaPrincipal(tienda)
-    ventana_principal.show()
-    app.exec()
+    tienda = TiendaMascotas()
+
+    # Agregar algunos perros y gatos rescatados
+    tienda.adoptar_perro("corxea", "3 años", "Labrador Retriever")
+    tienda.adoptar_perro("perejil","2 años" , "desconocido")
+    tienda.adoptar_gato("wisin", "1 años", "negro")
+    tienda.adoptar_gato("yandel", "4 años", "naranjo")

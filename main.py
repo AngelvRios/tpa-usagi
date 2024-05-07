@@ -1,17 +1,47 @@
-# Es obligatorio importar los codigos que se utilizaran de cada clase
-#from comida import comida 
-import sys
-import tkinter as  tk
-
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QGridLayout, QWidget
-from comida import *
-from ventana1 import VentanaPrincipal
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton
+from comida import SeleccionarComidaDialog
+from adopcion1 import VentanaPrincipal, TiendaMascotas  # Importar desde adopcion1.py
+from adopcion1 import VentanaAdopcion
+from adopcion1 import VentanaMascotas
 
 
+class VentanaPrincipal(QMainWindow):
+    def __init__(self, tienda):
+        super().__init__()
+        self.setWindowTitle("Tienda para mascotas")
+        self.setFixedSize(500, 400)
+        self.tienda = tienda
+
+        # Botón para seleccionar comida
+        btn_comida = QPushButton("Seleccionar Comida", self)
+        btn_comida.clicked.connect(self.abrir_ventana_comida)
+        btn_comida.setGeometry(50, 50, 200, 50)
+
+        # Botón para abrir ventana de adopción
+        btn_adopcion = QPushButton("Adoptar", self)
+        btn_adopcion.clicked.connect(self.abrir_ventana_adopcion)
+        btn_adopcion.setGeometry(50, 120, 200, 50)
+
+        # Botón para ver animales disponibles
+        btn_ver_animales = QPushButton("Ver Animales Disponibles", self)
+        btn_ver_animales.clicked.connect(self.mostrar_animales_disponibles)
+        btn_ver_animales.setGeometry(50, 190, 200, 50)
+
+    def abrir_ventana_comida(self):
+        dialogo_comida = SeleccionarComidaDialog(self)
+        dialogo_comida.exec()
+
+    def abrir_ventana_adopcion(self):
+        ventana_adopcion = VentanaAdopcion(self.tienda)
+        ventana_adopcion.exec()
+
+    def mostrar_animales_disponibles(self):
+        ventana_mascotas = VentanaMascotas(self.tienda)
+        ventana_mascotas.exec()
 
 if __name__ == "__main__":
     app = QApplication([])
-    ventana = VentanaPrincipal
+    tienda = TiendaMascotas()
+    ventana = VentanaPrincipal(tienda)  # Pasa la tienda como argumento
     ventana.show()
     app.exec()
