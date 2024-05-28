@@ -113,4 +113,4 @@ class VentanaAdopcion(QDialog):
         mensaje.setWindowTitle("Información guardada")
         mensaje.setText("¡Tu información ha sido guardada! Nos pondremos en contacto contigo.")
         mensaje.setIcon(QMessageBox.Icon.Information)
-        mensaje.exec_()
+        mensaje.exec()

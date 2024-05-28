@@ -6,17 +6,20 @@ class SeleccionarComidaDialog(QDialog):
         self.setWindowTitle("Seleccionar Comida")
         layout = QVBoxLayout()
 
-        # ComboBox para seleccionar la marca
-        self.marca_combo_box = QComboBox()
-        self.marca_combo_box.addItems(["Ricocan", "Mimaskot", "Dog Chow"])
-        layout.addWidget(QLabel("Marca:"))
-        layout.addWidget(self.marca_combo_box)
-
         # ComboBox para seleccionar el tipo de animal
         self.tipo_combo_box = QComboBox()
         self.tipo_combo_box.addItems(["perro", "gato", "tortuga", "conejo", "pájaro", "hamster"])
         layout.addWidget(QLabel("Tipo de animal:"))
         layout.addWidget(self.tipo_combo_box)
+        self.tipo_combo_box.currentIndexChanged.connect(self.actualizar_marcas)
+
+        # ComboBox para seleccionar la marca
+        self.marca_combo_box = QComboBox()
+        layout.addWidget(QLabel("Marca:"))
+        layout.addWidget(self.marca_combo_box)
+
+        # Llenamos inicialmente el comboBox de marcas
+        self.actualizar_marcas()
 
         # ComboBox para seleccionar la edad
         self.edad_combo_box = QComboBox()
@@ -38,6 +41,23 @@ class SeleccionarComidaDialog(QDialog):
 
         self.setLayout(layout)
 
+    def actualizar_marcas(self):
+        tipo_animal = self.tipo_combo_box.currentText()
+        self.marca_combo_box.clear()
+
+        if tipo_animal == "perro":
+            self.marca_combo_box.addItems(["Ricocan", "Mimaskot", "Dog Chow", "Pedigree"])
+        elif tipo_animal == "gato":
+            self.marca_combo_box.addItems(["Whiskas", "Royal Canin", "Purina", "Mimaskot"])
+        elif tipo_animal == "tortuga":
+            self.marca_combo_box.addItems(["Tetra", "Sera", "ReptoMin"])
+        elif tipo_animal == "conejo":
+            self.marca_combo_box.addItems(["Vitakraft", "Kaytee", "Oxbow"])
+        elif tipo_animal == "pájaro":
+            self.marca_combo_box.addItems(["Zupreem", "Kaytee", "Lafeber"])
+        elif tipo_animal == "hamster":
+            self.marca_combo_box.addItems(["Vitakraft", "Kaytee", "Oxbow"])
+
     def guardar_informacion(self):
         marca = self.marca_combo_box.currentText()
         tipo = self.tipo_combo_box.currentText()
@@ -52,3 +72,12 @@ class SeleccionarComidaDialog(QDialog):
         print("Cantidad de comida (kilogramos):", kilogramos)
 
         self.close()
+
+# Ejemplo de cómo mostrar el diálogo (esto normalmente iría en otra parte de tu aplicación)
+if __name__ == "__main__":
+    from PyQt6.QtWidgets import QApplication
+    import sys
+
+    app = QApplication(sys.argv)
+    dialog = SeleccionarComidaDialog()
+    dialog.exec()
