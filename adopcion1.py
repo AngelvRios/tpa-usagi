@@ -1,15 +1,16 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QLineEdit, QComboBox, QMessageBox
 
 class Adopcion:
-    def __init__(self, nombre, edad, raza):
+    def __init__(self, nombre, edad, raza, sexo):
         self.nombre = nombre
         self.edad = edad
         self.raza = raza
+        self.sexo = sexo
 
 class TiendaMascotas:
     def __init__(self):
-        self.perros_rescatados = [Adopcion("Max", "2 años", "Labrador"), Adopcion("Luna", "3 años", "Poodle")]
-        self.gatos_rescatados = [Adopcion("Simba", "1 año", "Siamés"), Adopcion("Nala", "2 años", "Persa")]
+        self.perros_rescatados = [Adopcion("wisin", "2 años", "Labrador", "macho"), Adopcion("Yandel", "3 años", "Poodle", "macho")]
+        self.gatos_rescatados = [Adopcion("Sasuke", "1 año", "Siamés", "macho"), Adopcion("Naruto", "2 años", "Persa", "macho")]
 
     def obtener_perros_disponibles(self):
         return self.perros_rescatados
@@ -20,7 +21,7 @@ class TiendaMascotas:
 class VentanaMascotas(QDialog):
     def __init__(self, tienda, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.setWindowTitle("Mascotas Disponibles")
+        self.setWindowTitle("Mascotas disponibles")
         self.setFixedSize(500, 500)
 
         self.layout = QVBoxLayout()  
@@ -43,13 +44,13 @@ class VentanaMascotas(QDialog):
         # Mostrar perros disponibles
         self.layout.addWidget(QLabel("Perros disponibles para adopción:"))
         for perro in perros:
-            perro_info = QLabel(f"Nombre: {perro.nombre}, Edad: {perro.edad}, Raza: {perro.raza}")
+            perro_info = QLabel(f"Nombre: {perro.nombre}, Edad: {perro.edad}, Raza: {perro.raza}, Sexo: {perro.sexo}")
             self.layout.addWidget(perro_info)
 
         # Mostrar gatos disponibles
         self.layout.addWidget(QLabel("Gatos disponibles para adopción:"))
         for gato in gatos:
-            gato_info = QLabel(f"Nombre: {gato.nombre}, Edad: {gato.edad}, Raza: {gato.raza}")
+            gato_info = QLabel(f"Nombre: {gato.nombre}, Edad: {gato.edad}, Raza: {gato.raza}, Sexo: {gato.sexo}")
             self.layout.addWidget(gato_info)
 
         self.setLayout(self.layout)
