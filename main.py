@@ -3,7 +3,8 @@ from datetime import datetime
 from comida import SeleccionarComidaDialog
 from adopcion1 import TiendaMascotas, VentanaAdopcion, VentanaMascotas
 from juguetes import SeleccionarJugueteDialog
-from accesorio import SeleccionarAccesorioDialog  # Asegúrate de que este import esté correcto
+from accesorio import SeleccionarAccesorioDialog 
+import csv
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self, tienda):
@@ -81,7 +82,6 @@ class VentanaPrincipal(QMainWindow):
 
     def registrar_adopcion(self):
         ventana_adopcion = self.sender()
-        # Asumimos que el método get_selected_animal() devuelve la información del animal adoptado
         animal = ventana_adopcion.get_selected_animal()
 
         with open("registro.txt", "a") as file:
@@ -90,6 +90,6 @@ class VentanaPrincipal(QMainWindow):
 if __name__ == "__main__":
     app = QApplication([])
     tienda = TiendaMascotas()
-    ventana = VentanaPrincipal(tienda)  # Pasa la tienda como argumento
+    ventana = VentanaPrincipal(tienda) 
     ventana.show()
     app.exec()

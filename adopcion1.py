@@ -31,7 +31,6 @@ class VentanaMascotas(QDialog):
         self.actualizar_mascotas_disponibles()
 
     def actualizar_mascotas_disponibles(self):
-        # Limpiar el layout antes de agregar nuevos widgets
         for i in reversed(range(self.layout.count())):
             widget = self.layout.itemAt(i).widget()
             if widget is not None:
@@ -96,16 +95,14 @@ class VentanaAdopcion(QDialog):
         self.tienda = tienda
 
     def guardar_adopcion(self):
-        # Obtener el texto de los campos
         nombre = self.nombre_edit.text().strip()
         edad = self.edad_edit.text().strip()
         correo = self.correo_edit.text().strip()
         nombremascota = self.nombremascota_edit.text().strip()
         genero = self.genero_combo_box.currentText()
 
-        # Verificar si algún campo está vacío
+    
         if not nombre or not edad or not correo or not nombremascota:
-            # Mostrar un mensaje de advertencia
             QMessageBox.warning(self, "Campos vacíos", "Por favor, llene todos los campos.")
             return
         

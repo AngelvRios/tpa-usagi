@@ -42,8 +42,7 @@ class VentanaJuguetes(QDialog):
         label = QLabel(f"Juguetes disponibles para {tipo_animal.capitalize()}:")
         layout.addWidget(label)
 
-        # Aquí podrías agregar la lógica para listar los juguetes disponibles según el tipo de animal
-        # Por simplicidad, agregamos algunos juguetes ficticios
+       
         if tipo_animal == "perro":
             juguetes = ["Pelota", "Hueso de goma", "Cuerda"]
         elif tipo_animal == "gato":

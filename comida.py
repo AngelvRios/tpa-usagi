@@ -64,8 +64,6 @@ class SeleccionarComidaDialog(QDialog):
         edad = self.edad_combo_box.currentText()
         kilogramos = self.kilogramos_spin_box.value()
 
-        # Aquí puedes hacer lo que necesites con la información guardada
-        # por ejemplo, imprimirlo o utilizarlo en otro lugar
         print("Marca:", marca)
         print("Tipo de animal:", tipo)
         print("Edad del animal:", edad)
@@ -73,7 +71,7 @@ class SeleccionarComidaDialog(QDialog):
 
         self.close()
 
-# Ejemplo de cómo mostrar el diálogo (esto normalmente iría en otra parte de tu aplicación)
+
 if __name__ == "__main__":
     from PyQt6.QtWidgets import QApplication
     import sys
