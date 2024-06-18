@@ -79,7 +79,7 @@ class VentanaAdopcion(QDialog):
         self.nombremascota_edit = QLineEdit()
         layout.addWidget(self.nombremascota_edit)
 
-        genero = ["Femenino", "Masculino", "Otro"]
+        genero = ["Femenino", "Masculino", "Otros"]
         self.genero_combo_box = QComboBox()
         self.genero_combo_box.addItems(genero)
         layout.addWidget(QLabel("Género:"))

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QComboBox, QSpinBox, QLabel, QPushButton
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QComboBox, QSpinBox, QLabel, QPushButton, QDialogButtonBox
 
 class SeleccionarComidaDialog(QDialog):
     def __init__(self, parent=None):
@@ -34,10 +34,11 @@ class SeleccionarComidaDialog(QDialog):
         layout.addWidget(QLabel("Cantidad de comida (kilogramos):"))
         layout.addWidget(self.kilogramos_spin_box)
 
-        # Botón de aceptar
-        btn_aceptar = QPushButton("Aceptar")
-        btn_aceptar.clicked.connect(self.guardar_informacion)
-        layout.addWidget(btn_aceptar)
+        # Botones de aceptar y cancelar
+        botones = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        botones.accepted.connect(self.accept)
+        botones.rejected.connect(self.reject)
+        layout.addWidget(botones)
 
         self.setLayout(layout)
 
@@ -58,18 +59,12 @@ class SeleccionarComidaDialog(QDialog):
         elif tipo_animal == "Hamster":
             self.marca_combo_box.addItems(["Vitakraft", "Kaytee", "Oxbow"])
 
-    def guardar_informacion(self):
+    def get_comida_seleccionada(self):
         marca = self.marca_combo_box.currentText()
         tipo = self.tipo_combo_box.currentText()
         edad = self.edad_combo_box.currentText()
         kilogramos = self.kilogramos_spin_box.value()
-
-        print("Marca:", marca)
-        print("Tipo de animal:", tipo)
-        print("Edad del animal:", edad)
-        print("Cantidad de comida (kilogramos):", kilogramos)
-
-        self.close()
+        return marca, tipo, edad, kilogramos
 
 
 if __name__ == "__main__":
@@ -78,4 +73,9 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     dialog = SeleccionarComidaDialog()
-    dialog.exec()
+    if dialog.exec() == QDialog.DialogCode.Accepted:
+        marca, tipo, edad, kilogramos = dialog.get_comida_seleccionada()
+        print(f"Marca: {marca}")
+        print(f"Tipo de animal: {tipo}")
+        print(f"Edad del animal: {edad}")
+        print(f"Cantidad de comida (kilogramos): {kilogramos}")
