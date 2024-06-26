@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QComboBox, QLabel, QDialogButtonBox, QApplication, QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QComboBox, QLabel, QDialogButtonBox, QApplication
 import sys
 
 class SeleccionarJugueteDialog(QDialog):
@@ -19,12 +19,11 @@ class SeleccionarJugueteDialog(QDialog):
         layout.addWidget(QLabel("Juguetes disponibles:"))
         layout.addWidget(self.juguetes_combo_box)
 
-        # Llenamos inicialmente el comboBox de juguetes
         self.actualizar_juguetes()
 
         # Botones de aceptar y cancelar
         botones = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
-        botones.accepted.connect(self.registrar_seleccion)
+        botones.accepted.connect(self.accept)
         botones.rejected.connect(self.reject)
         layout.addWidget(botones)
 
@@ -43,22 +42,17 @@ class SeleccionarJugueteDialog(QDialog):
         elif tipo_animal == "Roedores":
             self.juguetes_combo_box.addItems(["Rueda de ejercicio", "Casita de madera", "Túnel"])
 
-    def registrar_seleccion(self):
+    def get_juguete_seleccionado(self):
         tipo_animal = self.tipo_combo_box.currentText()
         juguete = self.juguetes_combo_box.currentText()
+        return tipo_animal, juguete
 
-        # Mostrar un mensaje de confirmación
-        QMessageBox.information(self, "Selección Guardada", f"Tipo de animal: {tipo_animal}\nJuguete: {juguete}")
-        
-        # Imprimir en consola (registro)
-        print(f"Tipo de animal: {tipo_animal}")
-        print(f"Juguete: {juguete}")
-
-        self.accept()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     dialog = SeleccionarJugueteDialog()
     if dialog.exec() == QDialog.DialogCode.Accepted:
-        # Las selecciones ya se imprimieron en el método registrar_seleccion
-        pass
+        tipo_animal, juguete = dialog.get_juguete_seleccionado()
+        print(f"Tipo de animal: {tipo_animal}")
+        print(f"Juguete: {juguete}")
+

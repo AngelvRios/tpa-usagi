@@ -1,21 +1,15 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QComboBox, QLabel, QSpinBox, QDialogButtonBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QComboBox, QSpinBox, QLabel, QDialogButtonBox
 
 class SeleccionarAccesorioDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, tipo_animal, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Seleccionar accesorios")
+        self.setWindowTitle("Seleccionar Accesorio")
         layout = QVBoxLayout()
 
-        # ComboBox para seleccionar el tipo de animal
-        self.tipo_combo_box = QComboBox()
-        self.tipo_combo_box.addItems(["Perro", "Gato", "Tortuga", "Conejo", "Pájaro", "Hamster"])
-        layout.addWidget(QLabel("Tipo de animal:"))
-        layout.addWidget(self.tipo_combo_box)
-        self.tipo_combo_box.currentIndexChanged.connect(self.actualizar_accesorios)
-
-        # ComboBox para seleccionar el accesorio
+        # ComboBox para seleccionar el tipo de accesorio
         self.accesorio_combo_box = QComboBox()
-        layout.addWidget(QLabel("Accesorio:"))
+        self.accesorio_combo_box.addItems(["Collar", "Correa", "Cama", "Transportadora", "Rascador"])
+        layout.addWidget(QLabel("Tipo de accesorio:"))
         layout.addWidget(self.accesorio_combo_box)
 
         # SpinBox para seleccionar la cantidad
@@ -33,28 +27,5 @@ class SeleccionarAccesorioDialog(QDialog):
 
         self.setLayout(layout)
 
-        # Llenamos inicialmente el comboBox de accesorios
-        self.actualizar_accesorios()
-
-    def actualizar_accesorios(self):
-        tipo_animal = self.tipo_combo_box.currentText()
-        self.accesorio_combo_box.clear()
-
-        if tipo_animal == "Perro":
-            self.accesorio_combo_box.addItems(["Correa", "Collar", "Cama"," Transportador"])
-        elif tipo_animal == "Gato":
-            self.accesorio_combo_box.addItems(["Rascador", "Collar", "Cama", "Transportador"])
-        elif tipo_animal == "Tortuga":
-            self.accesorio_combo_box.addItems(["Terrario", "Lámpara", "Filtro"])
-        elif tipo_animal == "Conejo":
-            self.accesorio_combo_box.addItems(["Jaula", "Bebedero", "Pellet"])
-        elif tipo_animal == "Pájaro":
-            self.accesorio_combo_box.addItems(["Jaula", "Percha", ])
-        elif tipo_animal == "Hamster":
-            self.accesorio_combo_box.addItems(["Jaula", "Rueda", "Pellet"])
-
     def get_accesorio_seleccionado(self):
-        accesorio = self.accesorio_combo_box.currentText()
-        cantidad = self.cantidad_spin_box.value()
-        return accesorio, cantidad
-
+        return self.accesorio_combo_box.currentText(), self.cantidad_spin_box.value()
