@@ -1,69 +1,130 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QComboBox, QSpinBox, QLabel, QPushButton, QDialogButtonBox
+import sys
+import csv
+from PyQt6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QScrollArea, QHBoxLayout, QDialog, QSpinBox
+)
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QPixmap, QIcon
 
-class SeleccionarComidaDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("Seleccionar Comida")
-        layout = QVBoxLayout()
+class VentanaProducto(QDialog):
+    def __init__(self, nombre_producto, imagen_producto, descripcion_producto, agregar_callback):
+        super().__init__()
+        self.setWindowTitle(nombre_producto)
+        self.setGeometry(150, 150, 600, 400)
+        self.setStyleSheet("background-color: pink;")
 
-      
-        self.tipo_combo_box = QComboBox()
-        self.tipo_combo_box.addItems(["Perro", "Gato", "Tortuga", "Conejo", "Pájaro", "Hamster"])
-        layout.addWidget(QLabel("Tipo de animal:"))
-        layout.addWidget(self.tipo_combo_box)
-        self.tipo_combo_box.currentIndexChanged.connect(self.actualizar_marcas)
+        self.agregar_callback = agregar_callback
 
+        # Layout principal
+        layout_principal = QVBoxLayout(self)
 
-        self.marca_combo_box = QComboBox()
-        layout.addWidget(QLabel("Marca:"))
-        layout.addWidget(self.marca_combo_box)
+        # Imagen del producto
+        etiqueta_imagen = QLabel(self)
+        pixmap = QPixmap(imagen_producto)
+        etiqueta_imagen.setPixmap(pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio))
+        layout_principal.addWidget(etiqueta_imagen)
 
-        self.actualizar_marcas()
+        # Descripción del producto
+        etiqueta_descripcion = QLabel(descripcion_producto, self)
+        etiqueta_descripcion.setStyleSheet(
+            "font-size: 18px; "
+            "margin: 10px;"
+        )
+        layout_principal.addWidget(etiqueta_descripcion)
 
-    
-        self.edad_combo_box = QComboBox()
-        self.edad_combo_box.addItems(["Cachorro", "Adulto", "Anciano"])
-        layout.addWidget(QLabel("Edad del animal:"))
-        layout.addWidget(self.edad_combo_box)
+        # Cantidad y botón de agregar al carrito
+        layout_cantidad = QHBoxLayout()
 
-       
-        self.kilogramos_spin_box = QSpinBox()
-        self.kilogramos_spin_box.setMinimum(1)
-        self.kilogramos_spin_box.setMaximum(100)
-        layout.addWidget(QLabel("Cantidad de comida (kilogramos):"))
-        layout.addWidget(self.kilogramos_spin_box)
-        
-     
-        botones = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
-        botones.accepted.connect(self.accept)
-        botones.rejected.connect(self.reject)
-        layout.addWidget(botones)
+        etiqueta_cantidad = QLabel("Cantidad: ", self)
+        etiqueta_cantidad.setStyleSheet("font-size: 18px;")
+        layout_cantidad.addWidget(etiqueta_cantidad)
 
+        self.spinbox_cantidad = QSpinBox(self)
+        self.spinbox_cantidad.setRange(1, 100)
+        self.spinbox_cantidad.setValue(1)
+        layout_cantidad.addWidget(self.spinbox_cantidad)
 
-        self.setLayout(layout)
+        boton_agregar_carrito = QPushButton("Agregar al carrito", self)
+        boton_agregar_carrito.setStyleSheet("font-size: 18px;")
+        boton_agregar_carrito.clicked.connect(self.agregar_al_carrito)
+        layout_cantidad.addWidget(boton_agregar_carrito)
 
-    def actualizar_marcas(self):
-        tipo_animal = self.tipo_combo_box.currentText()
-        self.marca_combo_box.clear()
+        layout_principal.addLayout(layout_cantidad)
 
-        if tipo_animal == "Perro":
-            self.marca_combo_box.addItems(["Ricocan", "Mimaskot", "Dog Chow", "Pedigree"])
-        elif tipo_animal == "Gato":
-            self.marca_combo_box.addItems(["Whiskas", "Royal Canin", "Purina", "Mimaskot"])
-        elif tipo_animal == "Tortuga":
-            self.marca_combo_box.addItems(["Tetra", "Sera", "ReptoMin"])
-        elif tipo_animal == "Conejo":
-            self.marca_combo_box.addItems(["Vitakraft", "Kaytee", "Oxbow"])
-        elif tipo_animal == "Pájaro":
-            self.marca_combo_box.addItems(["Zupreem", "Kaytee", "Lafeber"])
-        elif tipo_animal == "Hamster":
-            self.marca_combo_box.addItems(["Vitakraft", "Kaytee", "Oxbow"])
+    def agregar_al_carrito(self):
+        cantidad = self.spinbox_cantidad.value()
+        self.agregar_callback(self.windowTitle(), cantidad)
+        self.accept()
 
- 
+class VentanaPrincipal(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Alimentos")
+        self.setGeometry(100, 100, 800, 600)
+        self.setStyleSheet("background-color: pink;")
+
+        self.carrito = []
+
+        # Widget central
+        widget_central = QWidget()
+        self.setCentralWidget(widget_central)
+
+        # Layout principal
+        layout_principal = QVBoxLayout(widget_central)
+
+        # Título
+        etiqueta_titulo = QLabel("Alimentos")
+        etiqueta_titulo.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        etiqueta_titulo.setStyleSheet(
+            "font-size: 24px; "
+            "font-weight: bold; "
+            "margin: 10px;"
+        )
+        layout_principal.addWidget(etiqueta_titulo)
+
+        # Área de scroll para los botones
+        area_scroll = QScrollArea()
+        area_scroll.setWidgetResizable(True)
+
+        contenido_scroll = QWidget()
+        layout_scroll = QHBoxLayout(contenido_scroll)
+        layout_scroll.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        # Cargar productos desde CSV
+        self.productos = self.cargar_productos()
+
+        # Crear y estilizar botones
+        for producto in self.productos:
+            icon = QIcon(QPixmap(producto['imagen']))
+            boton = QPushButton()
+            boton.setIcon(icon)
+            boton.setIconSize(QSize(272, 272))  # Ajusta el tamaño del icono para que se ajuste al tamaño del botón
+            boton.setFixedSize(272, 272)
+            boton.setStyleSheet("font-size: 18px;")
+            boton.clicked.connect(lambda checked, p=producto: self.abrir_ventana_producto(p))
+            layout_scroll.addWidget(boton)
+
+        area_scroll.setWidget(contenido_scroll)
+        layout_principal.addWidget(area_scroll)
+
+    def cargar_productos(self):
+        productos = []
+        with open('productos.csv', mode='r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                productos.append(row)
+        return productos
+
+    def abrir_ventana_producto(self, producto):
+        ventana_producto = VentanaProducto(producto["nombre"], producto["imagen"], producto["descripcion"], self.agregar_al_carrito)
+        ventana_producto.exec()
+
+    def agregar_al_carrito(self, nombre_producto, cantidad):
+        self.carrito.append((nombre_producto, cantidad))
+        print(f"Agregado {cantidad} de {nombre_producto} al carrito")
+
 if __name__ == "__main__":
-    from PyQt6.QtWidgets import QApplication
-    import sys
-
     app = QApplication(sys.argv)
-    dialog = SeleccionarComidaDialog()
-    dialog.exec()
+    ventana = VentanaPrincipal()
+    ventana.show()
+    sys.exit(app.exec())

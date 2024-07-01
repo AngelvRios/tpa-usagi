@@ -3,10 +3,10 @@ from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtWidgets import QApplication, QMainWindow, QDockWidget, QDialog
 import csv
 from datetime import datetime
-from ui_login import Ui_LoginWindow  
-from ui_registro import Ui_RegistroWindow  
-from ui_dock_widget import Ui_DockWidget  
-from comida import SeleccionarComidaDialog
+from ui_login import Ui_LoginWindow
+from ui_registro import Ui_RegistroWindow
+from ui_dock_widget import Ui_DockWidget
+from comida import VentanaPrincipal as VentanaComida  # Asegúrate de importar correctamente
 from juguetes import SeleccionarJugueteDialog
 from accesorio import SeleccionarAccesorioDialog
 
@@ -16,6 +16,7 @@ class MainApp(QtWidgets.QMainWindow):
         self.ui_login = Ui_LoginWindow()
         self.ui_login.setupUi(self)
         self.ui_login.btnRegistro.clicked.connect(self.open_register_window)
+        self.ui_login.btnIngresar.clicked.connect(self.login)
 
     def open_register_window(self):
         self.ui_register = Ui_RegistroWindow()
@@ -47,7 +48,6 @@ class VentanaPrincipal(QMainWindow):
         self.ui_dock_widget.JuguetesButton.clicked.connect(self.abrir_ventana_juguetes)
         self.ui_dock_widget.MedicamentosButton_3.clicked.connect(lambda: self.abrir_ventana_accesorios("perro"))
 
-    
         self.inicializar_archivo_csv()
 
     def inicializar_archivo_csv(self):
@@ -76,14 +76,8 @@ class VentanaPrincipal(QMainWindow):
         self.ventana_adopcion.show()
 
     def abrir_ventana_comida(self):
-        dialog_comida = SeleccionarComidaDialog()
-        if dialog_comida.exec() == QDialog.DialogCode.Accepted:
-            marca = dialog_comida.marca_combo_box.currentText()
-            tipo = dialog_comida.tipo_combo_box.currentText()
-            edad = dialog_comida.edad_combo_box.currentText()
-            kilogramos = dialog_comida.kilogramos_spin_box.value()
-            detalles = f"Tipo: {tipo}, Marca: {marca}, Edad: {edad}, Cantidad: {kilogramos}kg"
-            self.registrar_operacion("Compra de comida", detalles)
+        dialog_comida = VentanaComida()
+        dialog_comida.show()
 
     def abrir_ventana_juguetes(self):
         dialog_juguetes = SeleccionarJugueteDialog()
@@ -92,7 +86,6 @@ class VentanaPrincipal(QMainWindow):
             juguete = dialog_juguetes.juguetes_combo_box.currentText()
             detalles = f"Tipo de animal: {tipo_animal}, Juguete: {juguete}"
             self.registrar_operacion("Compra de juguete", detalles)
-    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

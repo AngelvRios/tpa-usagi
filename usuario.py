@@ -80,9 +80,26 @@ class Usuario:
             print("No se encuentra el archivo CSV")
             
 usuarios = []
-        
-        
-        
+
+class Administrador(Usuario):
+    def __init__(self, username, nombre, apellido, correo, password):
+        super().__init__(username, nombre, apellido, correo, password, "admin")
+        self.es_admin = True
+
+    def funciones_especificas(self):
+        print("Funciones específicas del administrador")
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    # Crear un administrador
+    admin = Administrador("admin1", "Oscar", "Mansilla", "Oscar@example.com", "admincontra")
+    usuarios.append(admin)
     
+    # Mostrar información de los usuarios
+    for usuario in usuarios:
+        print(f"Username: {usuario.get_username()}, Nombre: {usuario.get_nombre()}, Cargo: {usuario.get_cargo()}")
     
+    # Llamar a una función específica del administrador
+    admin.funciones_especificas()
+
     

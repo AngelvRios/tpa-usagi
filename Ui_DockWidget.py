@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QMenu, QDialog, QVBoxLayout, QComboBox, QSpinBox, QLabel, QDialogButtonBox
 from datetime import datetime
-from comida import SeleccionarComidaDialog
+from comida import VentanaProducto
 from juguetes import SeleccionarJugueteDialog
 from accesorio import SeleccionarAccesorioDialog 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QDockWidget
