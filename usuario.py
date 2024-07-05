@@ -89,17 +89,4 @@ class Administrador(Usuario):
     def funciones_especificas(self):
         print("Funciones específicas del administrador")
 
-# Ejemplo de uso
-if __name__ == "__main__":
-    # Crear un administrador
-    admin = Administrador("admin1", "Oscar", "Mansilla", "Oscar@example.com", "admincontra")
-    usuarios.append(admin)
-    
-    # Mostrar información de los usuarios
-    for usuario in usuarios:
-        print(f"Username: {usuario.get_username()}, Nombre: {usuario.get_nombre()}, Cargo: {usuario.get_cargo()}")
-    
-    # Llamar a una función específica del administrador
-    admin.funciones_especificas()
-
     

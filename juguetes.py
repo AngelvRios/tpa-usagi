@@ -61,43 +61,26 @@ class SeleccionarJugueteDialog(QDialog):
             if widget is not None:
                 widget.setParent(None)
 
-        juguetes = []
-        if tipo_animal == "Perro":
-            juguetes = [
-                {"nombre": "Pelota", "imagen": "ruta/a/tu/imagen_pelota.jpg", "descripcion": "Pelota divertida", "marca": "Marca X"},
-                {"nombre": "Hueso de goma", "imagen": "ruta/a/tu/imagen_hueso.jpg", "descripcion": "Hueso duradero", "marca": "Marca Y"},
-                {"nombre": "Cuerda", "imagen": "ruta/a/tu/imagen_cuerda.jpg", "descripcion": "Cuerda resistente", "marca": "Marca Z"}
-            ]
-        elif tipo_animal == "Gato":
-            juguetes = [
-                {"nombre": "Ratón de juguete", "imagen": "ruta/a/tu/imagen_raton.jpg", "descripcion": "Ratón para jugar", "marca": "Marca A"},
-                {"nombre": "Pluma", "imagen": "ruta/a/tu/imagen_pluma.jpg", "descripcion": "Pluma divertida", "marca": "Marca B"},
-                {"nombre": "Rascador", "imagen": "ruta/a/tu/imagen_rascador.jpg", "descripcion": "Rascador para gatos", "marca": "Marca C"}
-            ]
-        elif tipo_animal == "Conejo":
-            juguetes = [
-                {"nombre": "Túnel", "imagen": "ruta/a/tu/imagen_tunel.jpg", "descripcion": "Túnel para explorar", "marca": "Marca D"},
-                {"nombre": "Zanahoria de juguete", "imagen": "ruta/a/tu/imagen_zanahoria.jpg", "descripcion": "Zanahoria divertida", "marca": "Marca E"},
-                {"nombre": "Mordedor", "imagen": "ruta/a/tu/imagen_mordedor.jpg", "descripcion": "Mordedor resistente", "marca": "Marca F"}
-            ]
-        elif tipo_animal == "Roedores":
-            juguetes = [
-                {"nombre": "Rueda de ejercicio", "imagen": "ruta/a/tu/imagen_rueda.jpg", "descripcion": "Rueda para ejercitarse", "marca": "Marca G"},
-                {"nombre": "Casita de madera", "imagen": "ruta/a/tu/imagen_casita.jpg", "descripcion": "Casita acogedora", "marca": "Marca H"},
-                {"nombre": "Túnel", "imagen": "ruta/a/tu/imagen_tunel.jpg", "descripcion": "Túnel para roedores", "marca": "Marca I"}
-            ]
-
-        for juguete in juguetes:
-            icon = QIcon(QPixmap(juguete["imagen"]))
+        # Cargar juguetes para el tipo de animal seleccionado
+        productos = self.cargar_productos(tipo_animal)
+        for producto in productos:
+            icon = QIcon(QPixmap(producto['imagen']))
             boton = QPushButton()
             boton.setIcon(icon)
-            boton.setIconSize(QSize(200, 200))
-            boton.setFixedSize(200, 200)
+            boton.setIconSize(QSize(272, 272))  # Ajusta el tamaño del icono para que se ajuste al tamaño del botón
+            boton.setFixedSize(272, 272)
             boton.setStyleSheet("font-size: 18px;")
-            boton.clicked.connect(lambda checked, j=juguete["nombre"]: self.seleccionar_juguete(j))
+            boton.clicked.connect(lambda checked, p=producto: self.seleccionar_juguete(p))
             self.layout_scroll.addWidget(boton)
 
-        self.area_scroll.setWidget(self.contenido_scroll)
+    def cargar_productos(self, tipo_animal):
+        productos = []
+        with open('productos.csv', mode='r', newline='', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                if row['tipo'] == "juguete" and row['tipo_animal'] == tipo_animal:
+                    productos.append(row)
+        return productos
 
     def seleccionar_juguete(self, juguete):
         self.juguete_seleccionado = juguete
@@ -110,7 +93,7 @@ class SeleccionarJugueteDialog(QDialog):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     dialogo = SeleccionarJugueteDialog()
-    if dialogo.exec() == QDialog.accepted:
+    if dialogo.exec() == QDialog.DialogCode.Accepted:
         tipo_animal, juguete = dialogo.get_juguete_seleccionado()
         print(f"Tipo de animal: {tipo_animal}")
         print(f"Juguete: {juguete}")

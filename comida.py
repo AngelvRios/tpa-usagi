@@ -112,11 +112,12 @@ class VentanaPrincipal(QMainWindow):
         with open('productos.csv', mode='r', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                productos.append(row)
+                if(row[6] == "comida"):
+                    productos.append(row)
         return productos
 
     def abrir_ventana_producto(self, producto):
-        ventana_producto = VentanaProducto(producto["nombre"], producto["imagen"], producto["descripcion"], self.agregar_al_carrito)
+        ventana_producto = VentanaProducto(producto["nombre"], producto["imagen"], producto["descripcion", producto["tipo"]], self.agregar_al_carrito)
         ventana_producto.exec()
 
     def agregar_al_carrito(self, nombre_producto, cantidad):

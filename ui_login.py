@@ -1,7 +1,8 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMessageBox
 from usuario import Usuario, usuarios
-
+from ventanaadmin import VentanaAdmin
+from ui_registro import *
 
 class Ui_LoginWindow(object):
     def setupUi(self, MainWindow):
@@ -81,6 +82,7 @@ class Ui_LoginWindow(object):
                                        "background-color: rgb(255, 137, 224);\n"
                                        "")
         self.btnRegistro.setObjectName("btnRegistro")
+        self.btnRegistro.clicked.connect(self.open_register_window)
 
         self.Logo = QtWidgets.QLabel(parent=self.centralwidget)
         self.Logo.setGeometry(QtCore.QRect(270, 50, 171, 181))
@@ -113,22 +115,37 @@ class Ui_LoginWindow(object):
     def Inicio(self):
         nombredeusuario = self.nomUser.text().lower()
         contrasena = self.cntUser.text()
+        
         if nombredeusuario.strip() == "" or contrasena.strip() == "":
             self.VentanaEmergente("Hay datos que no ha ingresado", "Error")
         else:
             for usuario in usuarios:
                 if nombredeusuario == usuario.get_username() and contrasena == usuario.get_password():
-                    self.VentanaEmergente("Ha iniciado sesion correctamente", "Inicio de sesión")
-                    self.abrirVentanaPrincipal()
-                    return  
+                    self.VentanaEmergente("Ha iniciado sesión correctamente", "Inicio de sesión")
+                    if usuario.get_cargo() == "admin":
+                        self.abrirVentanaAdmin()
+                        return  # Salir después de abrir la ventana admin
+                    else:
+                        self.abrirVentanaPrincipal()
+                        return  # Salir después de abrir la ventana principal
             self.VentanaEmergente("Sus datos están incorrectos", "Error")
-                    
+
+    def open_register_window(self):
+        self.ui_register = Ui_RegistroWindow()
+        self.register_window = QtWidgets.QMainWindow()
+        self.ui_register.setupUi(self.register_window)
+        self.register_window.show()
+
+    def abrirVentanaAdmin(self):
+        self.ventanaAdmin = VentanaAdmin()
+        self.ventanaAdmin.show()
+        main_window = self.centralwidget.parent()
+        main_window.close()
 
     def abrirVentanaPrincipal(self):
         from principal import VentanaPrincipal
         self.ventanaPrincipal = VentanaPrincipal()
         self.ventanaPrincipal.show()
-        
-   
+            
         main_window = self.centralwidget.parent()
         main_window.close()

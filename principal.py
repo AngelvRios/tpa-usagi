@@ -4,9 +4,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QDockWidget, QDialog
 import csv
 from datetime import datetime
 from ui_login import Ui_LoginWindow
-from ui_registro import Ui_RegistroWindow
 from ui_dock_widget import Ui_DockWidget
-from comida import VentanaPrincipal as VentanaComida  # Asegúrate de importar correctamente
+from comida import VentanaPrincipal as VentanaComida
 from juguetes import SeleccionarJugueteDialog
 from accesorio import SeleccionarAccesorioDialog
 
@@ -15,19 +14,7 @@ class MainApp(QtWidgets.QMainWindow):
         super().__init__()
         self.ui_login = Ui_LoginWindow()
         self.ui_login.setupUi(self)
-        self.ui_login.btnRegistro.clicked.connect(self.open_register_window)
-        self.ui_login.btnIngresar.clicked.connect(self.login)
 
-    def open_register_window(self):
-        self.ui_register = Ui_RegistroWindow()
-        self.register_window = QtWidgets.QMainWindow()
-        self.ui_register.setupUi(self.register_window)
-        self.register_window.show()
-
-    def login(self):
-        self.ventana_principal = VentanaPrincipal()
-        self.ventana_principal.show()
-        self.close()
 
 class VentanaPrincipal(QMainWindow):
     def __init__(self):
@@ -46,7 +33,7 @@ class VentanaPrincipal(QMainWindow):
         self.ui_dock_widget.AdopcionButton.clicked.connect(self.abrir_ventana_adopcion)
         self.ui_dock_widget.AlimentosButton.clicked.connect(self.abrir_ventana_comida)
         self.ui_dock_widget.JuguetesButton.clicked.connect(self.abrir_ventana_juguetes)
-        self.ui_dock_widget.MedicamentosButton_3.clicked.connect(lambda: self.abrir_ventana_accesorios("perro"))
+        self.ui_dock_widget.AccesorioButtom.clicked.connect(lambda: self.abrir_ventana_accesorios(None))
 
         self.inicializar_archivo_csv()
 
