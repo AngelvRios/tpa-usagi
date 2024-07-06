@@ -39,16 +39,17 @@ class VentanaAdmin(QtWidgets.QMainWindow):
         self.botonboleta.setObjectName("botonboleta")
         
         self.label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(10, 10, 41, 16))
+        self.label.setGeometry(QtCore.QRect(10, 10, 100, 16))
         self.label.setObjectName("label")
+        self.label.setText("Usuario:")
         
         self.nombredeusuario = QtWidgets.QLabel(parent=self.centralwidget)
-        self.nombredeusuario.setGeometry(QtCore.QRect(51, 12, 142, 19))
-        self.nombredeusuario.setText("")
+        self.nombredeusuario.setGeometry(QtCore.QRect(80, 7, 142, 19))
+        self.nombredeusuario.setText(self.nombre_usuario())
         self.nombredeusuario.setObjectName("nombredeusuario")
         
         self.label_2 = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(46, 282, 171, 141))
+        self.label_2.setGeometry(QtCore.QRect(46, 295, 171, 141))
         self.label_2.setText("")
         
         # Verificar si la imagen se carga correctamente
@@ -68,12 +69,11 @@ class VentanaAdmin(QtWidgets.QMainWindow):
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.setWindowTitle(_translate("MainWindow", "Administrador"))
         self.stockboton.setText(_translate("MainWindow", "Stock"))
         self.botonagregaradmin.setText(_translate("MainWindow", "Agregar Administrador"))
         self.ofertassemanales.setText(_translate("MainWindow", "Ofertas Semanales"))
         self.botonboleta.setText(_translate("MainWindow", "Boletas"))
-        self.label.setText(_translate("MainWindow", "Usuario:"))
 
     def abrir_stock(self):
         self.stock_window = StockWindow()
@@ -88,6 +88,11 @@ class VentanaAdmin(QtWidgets.QMainWindow):
     def abrir_ofertas(self):
         self.ofertas_semanales = OfertasSemanales()
         self.ofertas_semanales.show()
+
+    def nombre_usuario(self):
+        from ui_login import user
+        for nombre in user:
+            return nombre
 
 if __name__ == "__main__":
     import sys

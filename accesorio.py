@@ -80,7 +80,6 @@ class SeleccionarAccesorioDialog(QDialog):
             boton.setIconSize(QSize(272, 272))  # Ajusta el tamaño del icono para que se ajuste al tamaño del botón
             boton.setFixedSize(272, 272)
             boton.setStyleSheet("font-size: 18px;")
-            boton.clicked.connect(lambda checked, p=producto: self.seleccionar_accesorio(p))
             self.layout_scroll.addWidget(boton)
 
         # Verificación para asegurar que se están creando los botones
@@ -97,10 +96,6 @@ class SeleccionarAccesorioDialog(QDialog):
                 if row['tipo'] == "accesorio" and row['nombre'] == tipo_accesorio:
                     productos.append(row)
         return productos
-
-    def seleccionar_accesorio(self, accesorio):
-        self.accesorio_seleccionado = accesorio
-        print(f"Accesorio seleccionado: {accesorio}")
 
     def get_accesorio_seleccionado(self):
         return self.accesorio_seleccionado, self.cantidad_spin_box.value()

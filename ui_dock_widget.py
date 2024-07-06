@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QDockWidget, QPushButton, QLabel, QTextEdit, QSlider, QWidget
+from PyQt6.QtWidgets import (QApplication, QDockWidget, QPushButton, QLabel, QTextEdit, QSlider, QWidget,QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QScrollArea, QHBoxLayout, QDialog, QSpinBox)
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QMenu, QDialog, QVBoxLayout, QComboBox, QSpinBox, QLabel, QDialogButtonBox
@@ -7,7 +7,7 @@ from comida import VentanaPrincipal
 from juguetes import SeleccionarJugueteDialog
 from accesorio import SeleccionarAccesorioDialog  
 from PyQt6.QtWidgets import QApplication, QMainWindow, QDockWidget
-from PyQt6 import QtCore
+from PyQt6.QtCore import Qt, QSize
 import sys
 
 class Ui_DockWidget(object):
@@ -37,12 +37,6 @@ class Ui_DockWidget(object):
         self.BusquedaButton.setGeometry(QtCore.QRect(590, 10, 111, 41))
         self.BusquedaButton.setStyleSheet("background-color:rgb(170, 170, 255);\nborder-style:solid;\nborder-radius:20px;\nborder-width:2px;\nborder-color:rgb(159, 115, 255);")
         self.BusquedaButton.setObjectName("BusquedaButton")
-        self.label = QLabel(self.dockWidgetContents)
-        self.label.setGeometry(QtCore.QRect(570, 360, 121, 111))
-        self.label.setText("")
-        self.label.setPixmap(QPixmap("C:\\Users\\denis\\Downloads\\../../../../../../../Downloads/carpeta/patitas.png"))
-        self.label.setScaledContents(True)
-        self.label.setObjectName("label")
         self.CarritoButton_2 = QPushButton(self.dockWidgetContents)
         self.CarritoButton_2.setGeometry(QtCore.QRect(480, 10, 41, 41))
         self.CarritoButton_2.setStyleSheet("background-color:rgb(170, 170, 255);\nborder-style:solid;\nborder-radius:20px;\nborder-width:2px;\nborder-color:rgb(159, 115, 255);")
@@ -61,18 +55,6 @@ class Ui_DockWidget(object):
         self.CarritoButton_3.setIcon(icon1)
         self.CarritoButton_3.setIconSize(QtCore.QSize(30, 30))
         self.CarritoButton_3.setObjectName("CarritoButton_3")
-        self.texto_ofertas_2 = QTextEdit(self.dockWidgetContents)
-        self.texto_ofertas_2.setGeometry(QtCore.QRect(50, 310, 151, 41))
-        self.texto_ofertas_2.setStyleSheet("background-color: rgb(255, 178, 241);\nborder-style:solid;\nborder-radius:20px;\nborder-width:2px;\nborder-color:rgb(255, 193, 255);")
-        self.texto_ofertas_2.setObjectName("texto_ofertas_2")
-        self.texto_ofertas_3 = QTextEdit(self.dockWidgetContents)
-        self.texto_ofertas_3.setGeometry(QtCore.QRect(50, 80, 151, 41))
-        self.texto_ofertas_3.setStyleSheet("background-color: rgb(255, 178, 241);\nborder-style:solid;\nborder-radius:20px;\nborder-width:2px;\nborder-color:rgb(255, 193, 255);")
-        self.texto_ofertas_3.setObjectName("texto_ofertas_3")
-        self.horizontalSlider = QSlider(self.dockWidgetContents)
-        self.horizontalSlider.setGeometry(QtCore.QRect(100, 210, 491, 20))
-        self.horizontalSlider.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.horizontalSlider.setObjectName("horizontalSlider")
         self.ContactoButton = QPushButton(self.dockWidgetContents)
         self.ContactoButton.setGeometry(QtCore.QRect(40, 450, 81, 31))
         self.ContactoButton.setStyleSheet("background-color:rgb(170, 170, 255);\nborder-style:solid;\nborder-radius:20px;\nborder-width:2px;\nborder-color:rgb(159, 115, 255);")
@@ -87,6 +69,18 @@ class Ui_DockWidget(object):
         self.ContactoLogo.setIconSize(QtCore.QSize(30, 30))
         self.ContactoLogo.setObjectName("ContactoLogo")
         DockWidget.setWidget(self.dockWidgetContents)
+        layout_principal = QVBoxLayout()
+        # Área de scroll para los botones
+        self.area_scroll = QScrollArea()
+        self.area_scroll.setWidgetResizable(True)
+
+        self.contenido_scroll = QWidget()
+        self.layout_scroll = QHBoxLayout(self.contenido_scroll)
+        self.layout_scroll.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+        self.area_scroll.setWidget(self.contenido_scroll)
+        layout_principal.addWidget(self.area_scroll)
+
 
         self.retranslateUi(DockWidget)
         QtCore.QMetaObject.connectSlotsByName(DockWidget)

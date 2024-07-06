@@ -8,6 +8,8 @@ from ui_dock_widget import Ui_DockWidget
 from comida import VentanaPrincipal as VentanaComida
 from juguetes import SeleccionarJugueteDialog
 from accesorio import SeleccionarAccesorioDialog
+from adopcion import AdopcionVentana
+from Carrito import PaginaCarrito
 
 class MainApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -57,8 +59,7 @@ class VentanaPrincipal(QMainWindow):
             detalles = f"Tipo de animal: {tipo_animal}, Accesorio: {accesorio}, Cantidad: {cantidad}"
             self.registrar_operacion("Compra de accesorio", detalles)
 
-    def abrir_ventana_adopcion(self):
-        from adopcion import AdopcionVentana
+    def abrir_ventana_adopcion(self):   
         self.ventana_adopcion = AdopcionVentana()
         self.ventana_adopcion.show()
 

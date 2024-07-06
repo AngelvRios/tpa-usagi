@@ -112,9 +112,11 @@ class Ui_LoginWindow(object):
         vEmergente.setWindowTitle(Titulo)       
         vEmergente.exec()
 
+
     def Inicio(self):
         nombredeusuario = self.nomUser.text().lower()
         contrasena = self.cntUser.text()
+        user.append(nombredeusuario)
         
         if nombredeusuario.strip() == "" or contrasena.strip() == "":
             self.VentanaEmergente("Hay datos que no ha ingresado", "Error")
@@ -149,3 +151,5 @@ class Ui_LoginWindow(object):
             
         main_window = self.centralwidget.parent()
         main_window.close()
+
+user = []
