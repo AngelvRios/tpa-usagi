@@ -1,0 +1,47 @@
+nombre,imagen,descripcion,tipo_animal,marca,tipo,cantidad,precio
+Croquetas para Perro,img_croquetas_perro.jpg,Croquetas nutritivas para perros adultos,Perro,Holistic,comida,3,8000
+Alimento Balanceado para Perro,img_alimento_perro.jpg,Alimento completo y equilibrado para perros,Perro,VitalCan,comida,3,9500
+Dog Chow Premium,img_dog_chow.jpg,Alimento premium para perros de todas las edades,Perro,Purina,comida,5,12000
+Pedigree Adultos,img_pedigree.jpg,Alimento sabroso y nutritivo para perros adultos,Perro,Pedigree,comida,6,8500
+Whiskas para Gatos,img_whiskas_gatos.jpg,Comida húmeda para gatos con sabor a carne,Gato,Whiskas,comida,7,6500
+Royal Canin Gatos,img_royal_canin_gatos.jpg,Alimento seco para gatos con necesidades específicas,Gato,Royal Canin,comida,10,14000
+Purina Gourmet Gold,img_purina_gatos.jpg,Comida gourmet para gatos exigentes,Gato,Purina,comida,1,7500
+Alimento para Tortuga,img_alimento_tortuga.jpg,Pellets nutritivos para tortugas acuáticas,Tortuga,Sera,comida,0,5000
+Sera Turtle Granules,img_sera_tortuga.jpg,Alimento completo en gránulos para tortugas,Tortuga,Sera,comida,9,4800
+ReptoMin Floating Sticks,img_reptomin_tortuga.jpg,Palitos flotantes para tortugas acuáticas,Tortuga,Tetra,comida,8,5200
+Heno para Conejo,img_heno_conejo.jpg,Heno fresco y saludable para conejos,Conejo,Vitakraft,comida,10,4000
+Kaytee Forti-Diet Conejos,img_kaytee_conejo.jpg,Alimento completo y equilibrado para conejos,Conejo,Kaytee,comida,8,3800
+Oxbow Essentials Conejos,img_oxbow_conejo.jpg,Alimento premium para conejos adultos,Conejo,Oxbow,comida,3,4200
+Semillas para Pájaros,img_semillas_pajaros.jpg,Mezcla de semillas variadas para pájaros,Pájaro,Vitapro,comida,4,3000
+Kaytee Exact Rainbow,img_kaytee_pajaros.jpg,Alimento completo para la dieta diaria de pájaros,Pájaro,Kaytee,comida,5,3200
+Lafeber's Nutri-Berries,img_nutri_berrires_pajaros.jpg,Bayas nutritivas para pájaros grandes y pequeños,Pájaro,Lafeber,comida,5,3500
+Alimento para Hamster,img_alimento_hamster.jpg,Mezcla de granos y semillas para hámsters,Hámster,Vitakraft,comida,4,2500
+Kaytee Fiesta Hamsters,img_kaytee_hamster.jpg,Mezcla nutritiva y variada para hámsters,Hámster,Kaytee,comida,6,2800
+Oxbow Garden Select Hamsters,img_oxbow_hamster.jpg,Alimento premium para hámsters,Hámster,Oxbow,comida,7,3000
+Pelota,img_pelota.jpg,Pelota divertida para perros,Perro,TriXie,juguete,5,8000
+Hueso de goma,img_hueso.jpg,Hueso duradero para perros,Perro,Kong,juguete,3,6500
+Cuerda,img_cuerda.jpg,Cuerda resistente para perros,Perro,Trixie,juguete,2,4000
+Ratón de juguete,img_raton.jpg,Ratón de juguete para gatos,Gato,Kong,juguete,1,3000
+Pluma,img_pluma.jpg,Pluma divertida para gatos,Gato,Trixie,juguete,5,3500
+Rascador,img_rascador.jpg,Rascador para gatos,Gato,Ferplast,juguete,6,6000
+Túnel,img_tunel.jpg,Túnel para explorar para conejos,Conejo,Trixie,juguete,6,4500
+Zanahoria de juguete,img_zanahoria.jpg,Zanahoria de juguete para conejos,Conejo,Trixie,juguete,4,3200
+Mordedor,img_mordedor.jpg,Mordedor resistente para conejos,Conejo,Trixie,juguete,4,2800
+Rueda de ejercicio,img_rueda.jpg,Rueda de ejercicio para roedores,Roedores,Kaytee,juguete,3,3500
+Casita de madera,img_casita.jpg,Casita de madera para roedores,Roedores,Trixie,juguete,4,4200
+Túnel,img_tunel.jpg,Túnel para roedores,Roedores,Trixie,juguete,3,3000
+Collar,imagen_collar.jpg,Collar para mascotas,,Felican,accesorio,3,15000
+Collar,imagen_collar_reflectante.jpg,Collar para visibilidad nocturna,,Julius-K9,accesorio,3,18000
+Collar,imagen_collar_ajustable.jpg,Ideal para cualquier tamaño de mascota,,Hurtta,accesorio,5,20000
+Correa,imagen:imagen_correa_corta.jpg,Correa resistente,,Flexi,accesorio,3,12000
+Correa,imagen:imagen_correa_extensible.jpg,Correa para mayor libertad de movimiento,,Hurtta,accesorio,3,14000
+Correa,imagen:imagen_correa_reflectante.jpg,Correa para visibilidad nocturna,,Ruffwear,accesorio,3,16000
+Cama,imagen_cama_ovalada.jpg,Cama cómoda para descanso,,Marukan,accesorio,3,25000
+Cama,imagen_cama_redonda.jpg,Cama suave y acogedora,,Trixie,accesorio,3,18000
+Cama,imagen_cama_elevada.jpg,Cama elevada para clima caliente,,Eleva,accesorio,3,30000
+Transportadora,imagen_transportadora_basica.jpg,Transportadora segura y práctica,,Ibiyaya,accesorio,3,35000
+Transportadora,imagen_transportadora_plegable.jpg,Transportadora fácil de almacenar,,Petmate,accesorio,3,28000
+Transportadora,imagen_transportadora_lujo.jpg,Transportadora cómoda y elegante,,Sturdi Products,accesorio,3,42000
+Rascador,imagen_rascador_basico.jpg,Rascador para gatos,,M-Pets,accesorio,3,18000
+Rascador,imagen_rascador_arbol.jpg,Rascador con forma de árbol,,Zolux,accesorio,3,25000
+Rascador,imagen_rascador_carton.jpg,Rascador ecológico de cartón,,Karlie,accesorio,3,15000
