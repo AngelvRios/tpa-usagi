@@ -7,12 +7,13 @@ from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QIcon
 
 class VentanaProducto(QDialog):
-    def __init__(self, nombre_producto, imagen_producto, descripcion_producto, agregar_callback):
+    def __init__(self, nombre_producto, imagen_producto, descripcion_producto, precio_producto, agregar_callback):
         super().__init__()
         self.setWindowTitle(nombre_producto)
         self.setGeometry(150, 150, 600, 400)
         self.setStyleSheet("background-color: pink;")
 
+        self.precio_producto = precio_producto
         self.agregar_callback = agregar_callback
 
         # Layout principal
@@ -31,6 +32,14 @@ class VentanaProducto(QDialog):
             "margin: 10px;"
         )
         layout_principal.addWidget(etiqueta_descripcion)
+
+        # Precio del producto
+        etiqueta_precio = QLabel(f"Precio: ${precio_producto}", self)
+        etiqueta_precio.setStyleSheet(
+            "font-size: 18px; "
+            "margin: 10px;"
+        )
+        layout_principal.addWidget(etiqueta_precio)
 
         # Cantidad y botón de agregar al carrito
         layout_cantidad = QHBoxLayout()
@@ -53,7 +62,7 @@ class VentanaProducto(QDialog):
 
     def agregar_al_carrito(self):
         cantidad = self.spinbox_cantidad.value()
-        self.agregar_callback(self.windowTitle(), cantidad)
+        self.agregar_callback(self.windowTitle(), cantidad, self.precio_producto)
         self.accept()
 
 class VentanaPrincipal(QMainWindow):
@@ -112,7 +121,7 @@ class VentanaPrincipal(QMainWindow):
         with open('productos.csv', mode='r', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                if(row['tipo'] == "comida"):
+                if row['tipo'] == "comida":
                     productos.append(row)
         return productos
 
@@ -120,16 +129,17 @@ class VentanaPrincipal(QMainWindow):
         ventana_producto = VentanaProducto(
             producto["nombre"], 
             producto["imagen"], 
-            producto["descripcion"], 
+            producto["descripcion"],
+            float(producto["precio"]),  # Convertir el precio a float
             self.agregar_al_carrito
         )
         ventana_producto.exec()
 
-    def agregar_al_carrito(self, nombre_producto, cantidad):
+    def agregar_al_carrito(self, nombre_producto, cantidad, precio):
         #self.carrito.append((nombre_producto, cantidad))
         with open('carrito.csv', mode='a', newline='') as file:  # Cambié a 'a' para agregar al archivo en lugar de sobrescribir
             escritor = csv.writer(file)
-            escritor.writerow([nombre_producto, cantidad])
+            escritor.writerow([nombre_producto, cantidad, precio])
         print(f"Agregado {cantidad} de {nombre_producto} al carrito")
 
 if __name__ == "__main__":

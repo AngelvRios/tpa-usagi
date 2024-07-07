@@ -2,46 +2,56 @@ import sys
 import csv
 from PyQt6.QtWidgets import (
     QApplication, QDialog, QVBoxLayout, QLabel, QComboBox, QDialogButtonBox, 
-    QWidget, QScrollArea, QHBoxLayout, QPushButton
+    QWidget, QScrollArea, QPushButton, QSpinBox
 )
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap, QIcon
 
-class SeleccionarJugueteDialog(QDialog):
+class SeleccionarAccesorioDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Seleccionar Juguete")
+        self.setWindowTitle("Seleccionar Accesorio")
         self.setGeometry(100, 100, 800, 600)
         self.setStyleSheet("background-color: pink;")
 
-        self.juguete_seleccionado = None
+        self.accesorio_seleccionado = None
 
         # Layout principal
         layout_principal = QVBoxLayout(self)
 
-        # ComboBox para seleccionar el tipo de animal
-        etiqueta_tipo_animal = QLabel("Tipo de animal:")
-        etiqueta_tipo_animal.setStyleSheet("font-size: 18px; margin: 10px;")
-        layout_principal.addWidget(etiqueta_tipo_animal)
+        # ComboBox para seleccionar el tipo de accesorio
+        etiqueta_tipo_accesorio = QLabel("Tipo de accesorio:")
+        etiqueta_tipo_accesorio.setStyleSheet("font-size: 18px; margin: 10px;")
+        layout_principal.addWidget(etiqueta_tipo_accesorio)
 
-        self.tipo_combo_box = QComboBox(self)
-        self.tipo_combo_box.addItems(["Perro", "Gato", "Conejo", "Roedores"])
-        self.tipo_combo_box.currentIndexChanged.connect(self.actualizar_juguetes)
-        layout_principal.addWidget(self.tipo_combo_box)
+        self.accesorio_combo_box = QComboBox()
+        self.accesorio_combo_box.addItems(["Collar", "Correa", "Cama", "Transportadora", "Rascador"])
+        self.accesorio_combo_box.currentIndexChanged.connect(self.actualizar_accesorios)
+        layout_principal.addWidget(self.accesorio_combo_box)
 
-        # Área de scroll para los botones
+        # Área de scroll para los botones de accesorios
         self.area_scroll = QScrollArea()
         self.area_scroll.setWidgetResizable(True)
 
         self.contenido_scroll = QWidget()
-        self.layout_scroll = QHBoxLayout(self.contenido_scroll)
-        self.layout_scroll.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.layout_scroll = QVBoxLayout(self.contenido_scroll)
+        self.layout_scroll.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.area_scroll.setWidget(self.contenido_scroll)
         layout_principal.addWidget(self.area_scroll)
 
+        # SpinBox para seleccionar la cantidad
+        etiqueta_cantidad = QLabel("Cantidad:")
+        etiqueta_cantidad.setStyleSheet("font-size: 18px; margin: 10px;")
+        layout_principal.addWidget(etiqueta_cantidad)
+
+        self.cantidad_spin_box = QSpinBox()
+        self.cantidad_spin_box.setMinimum(1)
+        self.cantidad_spin_box.setMaximum(100)
+        layout_principal.addWidget(self.cantidad_spin_box)
+
         # Botones de aceptar y cancelar
-        botones = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel, self)
+        botones = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         botones.accepted.connect(self.accept)
         botones.rejected.connect(self.reject)
         layout_principal.addWidget(botones)
@@ -49,11 +59,11 @@ class SeleccionarJugueteDialog(QDialog):
         # Establecer el layout principal para la ventana
         self.setLayout(layout_principal)
 
-        # Inicializar lista de juguetes
-        self.actualizar_juguetes()
+        # Inicializar lista de accesorios
+        self.actualizar_accesorios()
 
-    def actualizar_juguetes(self):
-        tipo_animal = self.tipo_combo_box.currentText()
+    def actualizar_accesorios(self):
+        tipo_accesorio = self.accesorio_combo_box.currentText()
 
         # Limpiar layout anterior
         for i in reversed(range(self.layout_scroll.count())):
@@ -61,40 +71,67 @@ class SeleccionarJugueteDialog(QDialog):
             if widget is not None:
                 widget.setParent(None)
 
-        # Cargar juguetes para el tipo de animal seleccionado
-        productos = self.cargar_productos(tipo_animal)
+        # Cargar accesorios para el tipo de accesorio seleccionado
+        productos = self.cargar_productos(tipo_accesorio)
         for producto in productos:
+            # Crear widget para cada accesorio
+            widget_accesorio = QWidget()
+            layout_accesorio = QVBoxLayout(widget_accesorio)
+
             icon = QIcon(QPixmap(producto['imagen']))
             boton = QPushButton()
             boton.setIcon(icon)
             boton.setIconSize(QSize(272, 272))  # Ajusta el tamaño del icono para que se ajuste al tamaño del botón
             boton.setFixedSize(272, 272)
             boton.setStyleSheet("font-size: 18px;")
-            boton.clicked.connect(lambda checked, p=producto: self.seleccionar_juguete(p))
-            self.layout_scroll.addWidget(boton)
 
-    def cargar_productos(self, tipo_animal):
+            etiqueta_precio = QLabel(f"${producto['precio']}")
+            etiqueta_precio.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout_accesorio.addWidget(etiqueta_precio)
+            layout_accesorio.addWidget(boton)
+
+            # Conectar clic del botón con selección de accesorio
+            boton.clicked.connect(lambda checked, p=producto: self.seleccionar_accesorio(p))
+
+            self.layout_scroll.addWidget(widget_accesorio)
+
+    def cargar_productos(self, tipo_accesorio):
         productos = []
         with open('productos.csv', mode='r', newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                if row['tipo'] == "juguete" and row['tipo_animal'] == tipo_animal:
+                if row['tipo'] == "accesorio" and row['nombre'] == tipo_accesorio:
                     productos.append(row)
         return productos
 
-    def seleccionar_juguete(self, juguete):
-        self.juguete_seleccionado = juguete
-        print(f"Juguete seleccionado: {juguete}")
+    def seleccionar_accesorio(self, accesorio):
+        self.accesorio_seleccionado = accesorio
+        print(f"Accesorio seleccionado: {accesorio}")
 
-    def get_juguete_seleccionado(self):
-        tipo_animal = self.tipo_combo_box.currentText()
-        return tipo_animal, self.juguete_seleccionado
+    def get_accesorio_seleccionado(self):
+        return self.accesorio_seleccionado, self.cantidad_spin_box.value()
+
+    def agregar_al_carrito(self, nombre_producto, cantidad, precio):
+        with open('carrito.csv', mode='a', newline='', encoding='utf-8') as file:
+            escritor = csv.writer(file)
+            escritor.writerow([nombre_producto, cantidad, precio])
+        print(f"Agregado {cantidad} de {nombre_producto} al carrito")
+
+    def accept(self):
+        if self.accesorio_seleccionado is not None:
+            accesorio, cantidad = self.get_accesorio_seleccionado()
+            precio = self.accesorio_seleccionado['precio']  # Asumiendo que 'precio' está en tu CSV
+            self.agregar_al_carrito(accesorio['nombre'], cantidad, precio)
+        super().accept()
+
+    def reject(self):
+        super().reject()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    dialogo = SeleccionarJugueteDialog()
+    dialogo = SeleccionarAccesorioDialog()
     if dialogo.exec() == QDialog.DialogCode.Accepted:
-        tipo_animal, juguete = dialogo.get_juguete_seleccionado()
-        print(f"Tipo de animal: {tipo_animal}")
-        print(f"Juguete: {juguete}")
+        accesorio, cantidad = dialogo.get_accesorio_seleccionado()
+        print(f"Accesorio: {accesorio}")
+        print(f"Cantidad: {cantidad}")
     sys.exit(app.exec())

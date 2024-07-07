@@ -34,8 +34,8 @@ class SeleccionarAccesorioDialog(QDialog):
         self.area_scroll.setWidgetResizable(True)
 
         self.contenido_scroll = QWidget()
-        self.layout_scroll = QHBoxLayout(self.contenido_scroll)
-        self.layout_scroll.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.layout_scroll = QVBoxLayout(self.contenido_scroll)
+        self.layout_scroll.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.area_scroll.setWidget(self.contenido_scroll)
         layout_principal.addWidget(self.area_scroll)
@@ -74,19 +74,26 @@ class SeleccionarAccesorioDialog(QDialog):
         # Cargar accesorios para el tipo de accesorio seleccionado
         productos = self.cargar_productos(tipo_accesorio)
         for producto in productos:
+            # Crear widget para cada accesorio
+            widget_accesorio = QWidget()
+            layout_accesorio = QVBoxLayout(widget_accesorio)
+
             icon = QIcon(QPixmap(producto['imagen']))
             boton = QPushButton()
             boton.setIcon(icon)
             boton.setIconSize(QSize(272, 272))  # Ajusta el tamaño del icono para que se ajuste al tamaño del botón
             boton.setFixedSize(272, 272)
             boton.setStyleSheet("font-size: 18px;")
-            self.layout_scroll.addWidget(boton)
 
-        # Verificación para asegurar que se están creando los botones
-        if not productos:
-            print(f"No se encontraron productos para el tipo de accesorio: {tipo_accesorio}")
-        else:
-            print(f"Se encontraron {len(productos)} productos para el tipo de accesorio: {tipo_accesorio}")
+            etiqueta_precio = QLabel(f"${producto['precio']}")
+            etiqueta_precio.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout_accesorio.addWidget(etiqueta_precio)
+            layout_accesorio.addWidget(boton)
+
+            # Conectar clic del botón con selección de accesorio
+            boton.clicked.connect(lambda checked, p=producto: self.seleccionar_accesorio(p))
+
+            self.layout_scroll.addWidget(widget_accesorio)
 
     def cargar_productos(self, tipo_accesorio):
         productos = []
@@ -97,9 +104,18 @@ class SeleccionarAccesorioDialog(QDialog):
                     productos.append(row)
         return productos
 
+    def seleccionar_accesorio(self, accesorio):
+        self.accesorio_seleccionado = accesorio
+        print(f"Accesorio seleccionado: {accesorio}")
+
     def get_accesorio_seleccionado(self):
         return self.accesorio_seleccionado, self.cantidad_spin_box.value()
     
+    def agregar_al_carrito(self, nombre_producto, cantidad, precio):
+        with open('carrito.csv', mode='a', newline='') as file:
+            escritor = csv.writer(file)
+            escritor.writerow([nombre_producto, cantidad, precio])
+        print(f"Agregado {cantidad} de {nombre_producto} al carrito")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -109,4 +125,3 @@ if __name__ == "__main__":
         print(f"Accesorio: {accesorio}")
         print(f"Cantidad: {cantidad}")
     sys.exit(app.exec())
-
