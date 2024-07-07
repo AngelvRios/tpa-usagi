@@ -1,6 +1,6 @@
 import sys
 from PyQt6 import QtWidgets, QtCore
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QPushButton, QWidget, QDialog, QVBoxLayout, QLabel, QDialogButtonBox, QDockWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QPushButton, QWidget, QDialog, QVBoxLayout, QLabel, QDialogButtonBox, QDockWidget, QScrollArea
 import csv
 from datetime import datetime
 from ui_login import Ui_LoginWindow
@@ -38,6 +38,28 @@ class VentanaPrincipal(QMainWindow):
         self.ui_dock_widget.AccesorioButtom.clicked.connect(lambda: self.abrir_ventana_accesorios(None))
         self.ui_dock_widget.CarritoButton.clicked.connect(self.abrir_pagina_carrito)
 
+        # Scroll Area setup
+        self.scroll_area = QScrollArea(self)
+        self.scroll_area.setGeometry(50, 50, 700, 500)
+        self.scroll_area.setWidgetResizable(True)
+        
+        self.scroll_content = QWidget()
+        self.scroll_layout = QVBoxLayout(self.scroll_content)
+        self.scroll_area.setWidget(self.scroll_content)
+
+        self.load_offers()
+
+    def load_offers(self):
+        try:
+            with open('ofertas.csv', 'r') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    button = QPushButton(f"Oferta: {row[0]}", self)
+                    button.setFixedSize(100, 100)
+                    self.scroll_layout.addWidget(button)
+        except FileNotFoundError:
+            print("El archivo 'ofertas.csv' no se encuentra.")
+            
     def load_data(self):
         with open('productos.csv', 'r') as file:
             reader = csv.reader(file)
