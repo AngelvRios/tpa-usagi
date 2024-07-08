@@ -1,6 +1,8 @@
+# En principal.py
+
 import sys
 from PyQt6 import QtWidgets, QtCore
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QPushButton, QWidget, QDialog, QVBoxLayout, QLabel, QDialogButtonBox, QDockWidget, QScrollArea
+from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QDialog, QDockWidget, QScrollArea, QDialogButtonBox
 import csv
 from datetime import datetime
 from ui_login import Ui_LoginWindow
@@ -9,7 +11,7 @@ from comida import VentanaPrincipal as VentanaComida
 from juguetes import SeleccionarJugueteDialog
 from accesorio import SeleccionarAccesorioDialog
 from adopcion import AdopcionVentana
-from Carrito import PaginaCarrito
+from Carrito import PaginaCarrito  # Asumiendo que PaginaCarrito está implementado en carrito.py
 
 class MainApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -24,7 +26,7 @@ class VentanaPrincipal(QMainWindow):
         self.setGeometry(100, 100, 800, 600)
         self.setMinimumSize(800, 600)
         self.setMaximumSize(1000, 800)
-        
+
         # Dock widget setup
         self.dock_widget = QDockWidget("DockWidget", self)
         self.ui_dock_widget = Ui_DockWidget()
@@ -40,12 +42,20 @@ class VentanaPrincipal(QMainWindow):
 
         # Scroll Area setup
         self.scroll_area = QScrollArea(self)
-        self.scroll_area.setGeometry(50, 50, 700, 500)
+        self.scroll_area.setGeometry(70, 150, 500, 150)
         self.scroll_area.setWidgetResizable(True)
-        
+        self.scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroll_area.setStyleSheet("QScrollArea { background-color: pink; border: 2px solid black; }")
+
         self.scroll_content = QWidget()
-        self.scroll_layout = QVBoxLayout(self.scroll_content)
+        self.scroll_content.setStyleSheet("QWidget { background-color: pink; }")
+        self.scroll_layout = QHBoxLayout(self.scroll_content)
         self.scroll_area.setWidget(self.scroll_content)
+
+        # Crear instancia de PaginaCarrito
+        self.carrito_compras = PaginaCarrito()
+        self.carrito_compras.cargar_productos_desde_csv('carrito.csv')  # Cargar productos desde el CSV
 
         self.load_offers()
 
@@ -53,29 +63,23 @@ class VentanaPrincipal(QMainWindow):
         try:
             with open('ofertas.csv', 'r') as file:
                 reader = csv.reader(file)
+                # Saltar la primera línea (encabezado)
+                next(reader)
                 for row in reader:
-                    button = QPushButton(f"Oferta: {row[0]}", self)
+                    producto = row[0]
+                    button = QPushButton(f"Oferta: {producto}", self)
                     button.setFixedSize(100, 100)
+                    button.setStyleSheet("font-size: 16px; background-color: pink; border: 1px solid black;")
+                    button.clicked.connect(lambda _, producto=producto: self.agregar_al_carrito(producto))
                     self.scroll_layout.addWidget(button)
         except FileNotFoundError:
             print("El archivo 'ofertas.csv' no se encuentra.")
-            
-    def load_data(self):
-        with open('productos.csv', 'r') as file:
-            reader = csv.reader(file)
-            header = next(reader)
-            self.tableWidget.setColumnCount(len(header))
-            self.tableWidget.setHorizontalHeaderLabels(header)
-            for row in reader:
-                row_position = self.tableWidget.rowCount()
-                self.tableWidget.insertRow(row_position)
-                for column, item in enumerate(row):
-                    self.tableWidget.setItem(row_position, column, QTableWidgetItem(item))
 
-    def agregar_al_carrito(self, row, column):
-        nombre_producto = self.tableWidget.item(row, 0).text()
-        self.carrito.agregar_producto(nombre_producto)
-        print(f'Producto {nombre_producto} agregado al carrito.')
+    def agregar_al_carrito(self, producto):
+        with open('carrito.csv', mode='a', newline='') as file:
+            escritor = csv.writer(file)
+            escritor.writerow([producto,])
+        print(f'Producto {producto} agregado al carrito.')
 
     def inicializar_archivo_csv(self):
         try:
@@ -118,12 +122,8 @@ class VentanaPrincipal(QMainWindow):
         dialogo_carrito.setWindowTitle('Carrito de Compras')
         layout = QVBoxLayout()
 
-        # Aquí creamos una instancia de la ventana PaginaCarrito
-        carrito_compras = PaginaCarrito()
-        carrito_compras.cargar_productos_desde_csv('carrito.csv')  # Cargar productos desde el CSV
-
         # Agregamos la ventana PaginaCarrito al layout del QDialog
-        layout.addWidget(carrito_compras)
+        layout.addWidget(self.carrito_compras)
 
         botones = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok)
         botones.accepted.connect(dialogo_carrito.accept)

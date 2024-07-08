@@ -2,6 +2,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMessageBox
 from usuario import Usuario
 import csv
+import re
 
 class Ui_RegistroWindow(object):
     def setupUi(self, MainWindow):
@@ -148,31 +149,55 @@ class Ui_RegistroWindow(object):
         contrasena = self.cntUser.text()
         contrasenaConf = self.cntUserConfirm.text()
         cargo = "Cliente"
-        if(nomuser.strip()== "" or nombre.strip() == "" or apellido.strip() == "" or email.strip() == ""):
+        
+        if nomuser.strip() == "" or nombre.strip() == "" or apellido.strip() == "" or email.strip() == "":
             self.VentanaEmergente("Faltan datos por ingresar", "Error")
-        elif (self.verificarUserRepetido(nomuser)):
+        elif not self.validarUsername(nomuser):
+            self.VentanaEmergente("El nombre de usuario solo puede contener letras y números", "Error")
+        elif not self.validarNombreApellido(nombre):
+            self.VentanaEmergente("El nombre solo puede contener letras", "Error")
+        elif not self.validarNombreApellido(apellido):
+            self.VentanaEmergente("El apellido solo puede contener letras", "Error")
+        elif not self.validarCorreo(email):
+            self.VentanaEmergente("Ingrese un correo electrónico válido", "Error")
+        elif self.verificarUserRepetido(nomuser):
             self.VentanaEmergente("El nombre de usuario indicado se encuentra en uso", "Error")
-        elif (self.verificarCorreoRepetido(email)==True):
+        elif self.verificarCorreoRepetido(email):
             self.VentanaEmergente("El correo indicado ya se encuentra en uso", "Error")
-        elif (contrasena != contrasenaConf):
+        elif not self.validarContrasena(contrasena):
+            self.VentanaEmergente("La contraseña debe tener al menos 8 caracteres, incluyendo letras, números y un carácter especial", "Error")
+        elif contrasena != contrasenaConf:
             self.VentanaEmergente("Las contraseñas indicadas no son iguales", "Error")
         else:
             Usuario.registrarUsuario(nomuser, nombre, apellido, email, contrasena, cargo)
-            self.VentanaEmergente("El usuario "+ nomuser +" se ha registrado existosamente", "Registro")
+            self.VentanaEmergente("Usuario registrado con éxito", "Éxito")
 
-        
-    def verificarUserRepetido(self, username):
-            with open('usuarios.csv', mode='r') as file:
-                reader = csv.reader(file)
-                for fila in reader:
-                    if (username == fila[1]):
-                        return True     
-            return False
-                    
+    def validarCorreo(self, correo):
+        # Validar que el correo tenga un formato válido usando una expresión regular
+        return bool(re.match(r'^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$', correo))
+
     def verificarCorreoRepetido(self, email):
-            with open('usuarios.csv', mode='r') as file:
-                lector = csv.reader(file)
-                for fila in lector:
-                    if (email == fila[4]):
-                        return True
-            return False        
+        # Verificar si el correo ya está registrado en el archivo CSV
+        with open("usuarios.csv", "r", newline="") as archivo:
+            lector = csv.reader(archivo)
+            for row in lector:
+                if row and row[3] == email:
+                    return True
+        return False
+    
+    def verificarUserRepetido(self, nomuser):
+        with open("usuarios.csv", "r", newline="") as archivo:
+            reader = csv.reader(archivo)
+            for row in reader:
+                if row and row[0] == nomuser:
+                    return True
+        return False
+
+    def validarUsername(self, username):
+        return bool(re.match("^[a-zA-Z0-9]+$", username))
+
+    def validarNombreApellido(self, nombre):
+        return bool(re.match("^[a-zA-Z]+$", nombre))
+    
+    def validarContrasena(self, contrasena):
+        return bool(re.match("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$]).{8,}$", contrasena))

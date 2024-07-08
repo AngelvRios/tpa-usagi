@@ -1,6 +1,0 @@
-Fecha,Operación,Detalles
-2024-07-01T13:47:54.603025,Compra de accesorio,"Tipo de animal: None, Accesorio: None, Cantidad: 1"
-2024-07-05T23:23:08.536771,Compra de juguete,"Tipo de animal: Gato, Juguete: ('Gato', {'nombre': 'Cuerda', 'imagen': 'img_cuerda.jpg', 'descripcion': 'Cuerda resistente para perros', 'tipo_animal': 'Perro', 'marca': 'Marca Z', 'tipo': 'juguete', 'cantidad': '2', 'precio': None})"
-2024-07-05T23:23:12.779860,Compra de juguete,"Tipo de animal: Perro, Juguete: ('Perro', {'nombre': 'Cuerda', 'imagen': 'img_cuerda.jpg', 'descripcion': 'Cuerda resistente para perros', 'tipo_animal': 'Perro', 'marca': 'Marca Z', 'tipo': 'juguete', 'cantidad': '2', 'precio': None})"
-2024-07-06T22:42:19.764094,Compra de juguete,"Tipo de animal: Gato, Juguete: ('Gato', {'nombre': 'Ratón de juguete', 'imagen': 'img_raton.jpg', 'descripcion': 'Ratón de juguete para gatos', 'tipo_animal': 'Gato', 'marca': 'Kong', 'tipo': 'juguete', 'cantidad': '1', 'precio': '3000'})"
-2024-07-06T22:42:23.420678,Compra de accesorio,"Tipo de animal: None, Accesorio: None, Cantidad: 1"

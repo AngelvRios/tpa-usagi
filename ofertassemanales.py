@@ -1,18 +1,18 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QDialog, QFormLayout, QLineEdit, QMessageBox
+import random
 import csv
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QPushButton, QTableWidget, QTableWidgetItem
 
 class OfertasSemanales(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Ofertas Semanales")
-        self.setGeometry(100, 100, 1200, 600)  # Aumenté el ancho para mostrar mejor los datos
+        self.setGeometry(100, 100, 1200, 600)
         self.setStyleSheet("background-color:pink")
 
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
 
-        # Layout principal
         self.layout = QHBoxLayout(self.central_widget)
 
         # Tabla de productos
@@ -78,6 +78,16 @@ class OfertasSemanales(QMainWindow):
             for col_idx in range(self.table_productos.columnCount()):
                 producto.append(self.table_productos.item(selected_row, col_idx).text())
 
+            # Generar descuento aleatorio entre 10% y 50%
+            descuento = random.randint(10, 50)  # Descuento entero entre 10 y 50%
+            descuento_decimal = descuento / 100.0  # Convertir a decimal para cálculos
+            precio_original = int(producto[7])  # Obtener el precio original desde el producto seleccionado
+            precio_con_descuento = precio_original * (1 - descuento_decimal)
+            precio_formateado = "{:.2f}".format(precio_con_descuento).rstrip('0').rstrip('.')
+
+            # Modificar el precio en el producto para la tabla de ofertas
+            producto[7] = str(precio_formateado)  # Actualizar el precio con descuento
+
             # Agregar el producto a la tabla de ofertas
             row_count = self.table_ofertas.rowCount()
             self.table_ofertas.insertRow(row_count)
@@ -117,4 +127,3 @@ if __name__ == "__main__":
     ventana_ofertas = OfertasSemanales()
     ventana_ofertas.show()
     sys.exit(app.exec())
-
