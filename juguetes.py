@@ -25,7 +25,7 @@ class SeleccionarJugueteDialog(QDialog):
         layout_principal.addWidget(etiqueta_tipo_juguete)
 
         self.juguete_combo_box = QComboBox()
-        self.juguete_combo_box.addItems(["Pelota", "Cuerda", "Peluche", "Mordedor", "Lanzador"])
+        self.juguete_combo_box.addItems(["Pelota", "Cuerda", "Ratón de juguete", "Mordedor", "Zanahoria de juguete", "Rueda de ejercicio", "Casita de madera", "Túnel"])
         self.juguete_combo_box.currentIndexChanged.connect(self.actualizar_juguetes)
         layout_principal.addWidget(self.juguete_combo_box)
 

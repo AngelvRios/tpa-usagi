@@ -115,7 +115,7 @@ class SeleccionarAccesorioDialog(QDialog):
         with open('carrito.csv', mode='a', newline='') as file:
             escritor = csv.writer(file)
             escritor.writerow([nombre_producto, cantidad, precio])
-        print(f"Agregado {cantidad} de {nombre_producto} al carrito")
+        print(f"Agregado {cantidad} de {nombre_producto} al carrito con un precio de {precio}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

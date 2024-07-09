@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QLabel, QVBoxLayout, QHBoxLayo
 class PaginaCarrito(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.carrito = []
         self.inicializarUI()
 
     def inicializarUI(self):
@@ -32,7 +33,6 @@ class PaginaCarrito(QMainWindow):
         tarjeta_datos_de_compra.setStyleSheet("color: black;")
         layout_dato_de_copra.addWidget(tarjeta_datos_de_compra)
 
-        # Botones y entrada de texto (layout_dato_de_compra)
         # Scroll area para mostrar productos
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
@@ -80,51 +80,66 @@ class PaginaCarrito(QMainWindow):
         # Llenar el scroll area con los productos del archivo CSV
         self.cargar_productos_desde_csv('carrito.csv')
 
-    def cargar_productos_desde_csv(self, archivo_csv):
+    def cargar_productos_desde_csv(self, archivo):
+        total_pagar = 0.0
         try:
-            with open(archivo_csv, mode='r', newline='') as file:
-                csv_leector = csv.reader(file)
-                next(csv_leector)  # Saltar el encabezado
-                total_pagar = 0
-
-                for row in csv_leector:
-                    nombre = row[0].strip()
-                    cantidad = int(row[1].strip())
-                    precio = float(row[2].strip())
-                    producto = QLabel(f"Nombre: {nombre}, Cantidad: {cantidad}, Precio: {precio}", self.scroll_area_widget)
-                    producto.setStyleSheet("color: black;")
-                    self.scroll_area_layout.addWidget(producto)
-                    total_pagar += precio * cantidad  # Aquí se suma el precio total de los productos añadidos a la lista
-
-                # Mostrar el total a pagar
-                total_label = QLabel(f"Total a pagar: {total_pagar}", self.scroll_area_widget)
-                total_label.setStyleSheet("color: black;")
-                self.scroll_area_layout.addWidget(total_label)
-
+            with open(archivo, mode='r', newline='') as file:
+                lector = csv.reader(file)
+                for row in lector:
+                    if len(row) < 3:
+                        print(f"Advertencia: Línea mal formada en {archivo}: {row}")
+                        continue
+                    nombre_producto = row[0].strip()
+                    try:
+                        cantidad = int(row[1].strip())
+                        precio = float(row[2].strip())
+                    except ValueError:
+                        print(f"Error de conversión en la línea: {row}")
+                        continue
+                    total_pagar += cantidad * precio
+                    producto_label = QLabel(f"{nombre_producto}: {cantidad} x ${precio:.2f}", self.scroll_area_widget)
+                    producto_label.setStyleSheet("color: black;")
+                    self.scroll_area_layout.addWidget(producto_label)
+                    self.carrito.append((nombre_producto, cantidad, precio))
+            
+            # Mostrar el total a pagar
+            total_label = QLabel(f"Total a pagar: ${total_pagar:.2f}", self.scroll_area_widget)
+            total_label.setStyleSheet("color: black;")
+            self.scroll_area_layout.addWidget(total_label)
         except FileNotFoundError:
             error_label = QLabel("Archivo CSV no encontrado.", self.scroll_area_widget)
+            error_label.setStyleSheet("color: black;")
+            self.scroll_area_layout.addWidget(error_label)
+        except Exception as e:
+            error_label = QLabel(f"Error al leer el archivo {archivo}: {e}", self.scroll_area_widget)
             error_label.setStyleSheet("color: black;")
             self.scroll_area_layout.addWidget(error_label)
 
     def guardar_numero_tarjeta(self):
         # Guardar el texto del QLineEdit en una variable
         numero_tarjeta = self.entrada_N_tarjeta.text()
-        # Mostrar si la tarjeta fue o no verificada con exito
+        # Mostrar si la tarjeta fue o no verificada con éxito
         if self.algoritmo_de_Luhn(numero_tarjeta):
             self.etiqueta_resultado.setText("Tarjeta verificada con éxito")
         else:
             self.etiqueta_resultado.setText("Tarjeta no verificada")
 
     def algoritmo_de_Luhn(self, numero_tarjeta):
-        # Convertir el número de tarjeta a una lista de digitos
-        digitos = [int(caracter) for caracter in str(numero_tarjeta)] # convertimos cada caracter en digito entero
-        # multiplicamos cada segunto termino de derecha a izquierda
-        for i in range(len(digitos)-2,-1,-2):
+        # Convertir el número de tarjeta a una lista de dígitos
+        digitos = [int(caracter) for caracter in str(numero_tarjeta)]  # Convertimos cada caracter en dígito entero
+        # Multiplicamos cada segundo término de derecha a izquierda
+        for i in range(len(digitos) - 2, -1, -2):
             digitos[i] *= 2
-            if digitos[i] > 9: # si el digito que se a multiplicado por dos es mayor a 9 se le resta 9
+            if digitos[i] > 9:  # Si el dígito que se ha multiplicado por dos es mayor a 9 se le resta 9
                 digitos[i] -= 9
         
-        # sumamos todos los digitos de la lista con la funcion suma --> sum(lista_de_elementos)
+        # Sumamos todos los dígitos de la lista con la función sum --> sum(lista_de_elementos)
         suma_total = sum(digitos)
 
-        return suma_total % 10 == 0 # si la sima total es igual a cero significa que la tarjeta es valida
+        return suma_total % 10 == 0  # Si la suma total es igual a cero significa que la tarjeta es válida
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ventana = PaginaCarrito()
+    ventana.show()
+    sys.exit(app.exec())
